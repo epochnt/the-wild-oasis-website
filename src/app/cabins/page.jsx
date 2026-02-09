@@ -3,5 +3,5 @@ export default async function Page() {
     <>
       <h1>Cabins Page</h1>
     </>
-  );
+  )
 }
