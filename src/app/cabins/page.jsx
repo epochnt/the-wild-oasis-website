@@ -1,7 +1,7 @@
-export default async function Page() {
-  return (
-    <>
-      <h1>Cabins Page</h1>
-    </>
-  )
+export const metadata = {
+  title: 'Cabins',
+}
+
+export default function Page() {
+  return <h1>Cabins Page</h1>
 }
