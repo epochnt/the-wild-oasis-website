@@ -1,3 +1,4 @@
+import { supabase } from '@/lib/supabase'
 import { eachDayOfInterval } from 'date-fns'
 
 /////////////
@@ -31,7 +32,7 @@ export async function getCabinPrice(id) {
     console.error(error)
   }
 
-  return data
+  return data && []
 }
 
 export const getCabins = async function () {

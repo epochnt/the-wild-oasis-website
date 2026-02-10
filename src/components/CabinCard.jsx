@@ -7,11 +7,14 @@ export function CabinCard({ cabin }) {
 
   return (
     <div className="border-primary-800 flex border">
-      <Image
-        src={image}
-        alt={`Cabin ${name}`}
-        className="border-primary-800 flex-1 border-r"
-      />
+      <div className="relative aspect-auto flex-1">
+        <Image
+          fill
+          src={image}
+          alt={`Cabin ${name}`}
+          className="border-primary-800 flex-1 border-r object-cover"
+        />
+      </div>
 
       <div className="grow">
         <div className="bg-primary-950 px-7 pt-5 pb-4">
