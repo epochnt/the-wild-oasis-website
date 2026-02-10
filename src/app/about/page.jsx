@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import Image from 'next/image'
 
 export const metadata = {
@@ -72,12 +73,12 @@ export default function Page() {
           </p>
 
           <div>
-            <a
+            <Link
               href="/cabins"
               className="bg-accent-500 text-primary-800 hover:bg-accent-600 mt-4 inline-block px-8 py-5 text-lg font-semibold transition-all"
             >
               Explore our luxury cabins
-            </a>
+            </Link>
           </div>
         </div>
       </div>
