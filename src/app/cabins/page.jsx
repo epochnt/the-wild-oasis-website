@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 import { CabinList, Spinner } from '@/components'
 
+export const revalidate = 604800
 export const metadata = {
   title: 'Cabins',
 }
