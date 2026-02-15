@@ -1,5 +1,6 @@
 export * from './Logo'
 export * from './Header'
+export * from './Filter'
 export * from './Spinner'
 export * from './CabinCard'
 export * from './CabinList'

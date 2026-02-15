@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import { CabinList, Spinner } from '@/components'
+import { CabinList, Spinner, Filter } from '@/components'
 
 // export const revalidate = 604800 No need as this now becomes dynamic page
 
@@ -9,6 +9,7 @@ export const metadata = {
 
 export default async function Page({ searchParams }) {
   const { capacity } = await searchParams
+
   return (
     <div>
       <h1 className="text-accent-400 mb-5 text-4xl font-medium">
@@ -22,7 +23,10 @@ export default async function Page({ searchParams }) {
         home away from home. The perfect spot for a peaceful, calm vacation.
         Welcome to paradise.
       </p>
-      <Suspense fallback={<Spinner />}>
+      <div className="mb-8 flex justify-end">
+        <Filter />
+      </div>
+      <Suspense fallback={<Spinner />} key={capacity}>
         <CabinList {...{ capacity }} />
       </Suspense>
     </div>

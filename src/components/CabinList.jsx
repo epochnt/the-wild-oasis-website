@@ -7,9 +7,9 @@ export async function CabinList({ capacity }) {
 
   //Filer cabins
   const capacityRanges = {
-    small: [0, 2],
+    small: [0, 3],
     medium: [4, 6],
-    large: [8, 10],
+    large: [7, 10],
   }
 
   const filteredCabins =
