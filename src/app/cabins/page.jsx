@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import { CabinList, Spinner, Filter } from '@/components'
+import { CabinList, Spinner, Filter, ReservationReminder } from '@/components'
 
 // export const revalidate = 604800 No need as this now becomes dynamic page
 
@@ -28,6 +28,7 @@ export default async function Page({ searchParams }) {
       </div>
       <Suspense fallback={<Spinner />} key={capacity}>
         <CabinList {...{ capacity }} />
+        <ReservationReminder />
       </Suspense>
     </div>
   )
