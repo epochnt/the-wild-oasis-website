@@ -1,9 +1,10 @@
 'use server'
 
 import { auth, signIn, signOut } from '@/lib/auth'
-import { updateGuest } from '@/lib/data-service'
+import { deleteBooking, getBookings, updateGuest } from '@/lib/data-service'
 import { revalidatePath } from 'next/cache'
 
+// Mutations
 export async function updateProfile(formData) {
   const session = await auth()
   if (!session) throw new Error('You must be logged in')
@@ -18,6 +19,19 @@ export async function updateProfile(formData) {
   await updateGuest(session.user.guestId, updateData)
 
   revalidatePath('/account/profile')
+}
+
+export async function deleteReservationAction(bookingId) {
+  const session = await auth()
+  if (!session) throw new Error('You must be logged in')
+
+  const guestBookings = await getBookings(session.user.guestId)
+  const validId = guestBookings.some(booking => booking.id === bookingId)
+
+  if (!validId) throw new Error('You are not allowed to deleted this booking')
+  await deleteBooking(bookingId)
+
+  revalidatePath('/account/reservations')
 }
 
 // Auth actions
