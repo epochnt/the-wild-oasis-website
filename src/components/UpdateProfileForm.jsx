@@ -1,4 +1,10 @@
-export function UpdateProfileForm({ children }) {
+'use client'
+
+import Image from 'next/image'
+import { updateProfile } from '@/lib/actions'
+
+export function UpdateProfileForm({ guest, children }) {
+  const { fullName, email, countryFlag, nationalID } = guest
   return (
     <div>
       <h2 className="text-accent-400 mb-4 text-2xl font-semibold">
@@ -10,11 +16,16 @@ export function UpdateProfileForm({ children }) {
         faster and smoother. See you soon!
       </p>
 
-      <form className="bg-primary-900 flex flex-col gap-6 px-12 py-8 text-lg">
+      <form
+        action={updateProfile}
+        className="bg-primary-900 flex flex-col gap-6 px-12 py-8 text-lg"
+      >
         <div className="space-y-2">
           <label>Full name</label>
           <input
             disabled
+            name="fullName"
+            defaultValue={fullName}
             className="bg-primary-200 text-primary-800 w-full rounded-sm px-5 py-3 shadow-sm disabled:cursor-not-allowed disabled:bg-gray-600 disabled:text-gray-400"
           />
         </div>
@@ -23,6 +34,8 @@ export function UpdateProfileForm({ children }) {
           <label>Email address</label>
           <input
             disabled
+            name="email"
+            defaultValue={email}
             className="bg-primary-200 text-primary-800 w-full rounded-sm px-5 py-3 shadow-sm disabled:cursor-not-allowed disabled:bg-gray-600 disabled:text-gray-400"
           />
         </div>
@@ -30,13 +43,13 @@ export function UpdateProfileForm({ children }) {
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <label htmlFor="nationality">Where are you from?</label>
-            {/* <Image
+            <Image
               src={countryFlag}
               alt="Country flag"
               height={30}
               width={40}
               className="h-5 rounded-sm"
-            /> */}
+            />
           </div>
           {children}
         </div>
@@ -45,6 +58,7 @@ export function UpdateProfileForm({ children }) {
           <label htmlFor="nationalID">National ID number</label>
           <input
             name="nationalID"
+            defaultValue={nationalID}
             className="bg-primary-200 text-primary-800 w-full rounded-sm px-5 py-3 shadow-sm"
           />
         </div>
