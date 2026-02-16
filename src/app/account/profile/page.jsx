@@ -1,7 +1,7 @@
 import { SelectCountry, UpdateProfileForm } from '@/components'
 import { auth, getGuest } from '@/lib'
 
-export const metaData = {
+export const metadata = {
   title: 'Update Profile',
 }
 
@@ -16,6 +16,7 @@ export default async function Page() {
         id="nationality"
         className="bg-primary-200 text-primary-800 w-full rounded-sm px-5 py-3 shadow-sm"
         defaultCountry={guest.nationality}
+        key={guest.nationality}
       />
     </UpdateProfileForm>
   )

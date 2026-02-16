@@ -2,6 +2,7 @@
 
 import { auth, signIn, signOut } from '@/lib/auth'
 import { updateGuest } from '@/lib/data-service'
+import { revalidatePath } from 'next/cache'
 
 export async function updateProfile(formData) {
   const session = await auth()
@@ -14,7 +15,9 @@ export async function updateProfile(formData) {
     throw new Error('Please provide a valid national Id')
 
   const updateData = { nationalID, nationality, countryFlag }
-  const data = await updateGuest(session.user.guestId, updateData)
+  await updateGuest(session.user.guestId, updateData)
+
+  revalidatePath('/account/profile')
 }
 
 // Auth actions
