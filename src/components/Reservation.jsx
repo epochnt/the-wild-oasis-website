@@ -1,16 +1,23 @@
-import { getBookedDatesByCabinId, getSettings } from '@/lib'
+import { getBookedDatesByCabinId, getSettings, auth } from '@/lib'
 import { DateSelector } from './DateSelector'
 import { ReservationForm } from './ReservationForm'
+import { LoginMessage } from './LoginMessage'
 
 export async function Reservation({ cabin }) {
-  const [settings, bookedDates] = await Promise.all([
+  const [settings, bookedDates, session] = await Promise.all([
     getSettings(),
     getBookedDatesByCabinId(cabin.id),
+    auth(),
   ])
+
   return (
     <div className="border-primary-800 grid min-h-100 grid-cols-2 border">
       <DateSelector {...{ cabin, settings, bookedDates }} />
-      <ReservationForm maxCapacity={cabin.maxCapacity} />
+      {session ? (
+        <ReservationForm maxCapacity={cabin.maxCapacity} user={session.user} />
+      ) : (
+        <LoginMessage />
+      )}
     </div>
   )
 }
