@@ -1,8 +1,14 @@
 'use server'
 
-import { auth, signIn, signOut } from '@/lib/auth'
-import { deleteBooking, getBookings, updateGuest } from '@/lib/data-service'
 import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
+import { auth, signIn, signOut } from '@/lib/auth'
+import {
+  deleteBooking,
+  getBookings,
+  updateBooking,
+  updateGuest,
+} from '@/lib/data-service'
 
 // Mutations
 export async function updateProfile(formData) {
@@ -19,6 +25,27 @@ export async function updateProfile(formData) {
   await updateGuest(session.user.guestId, updateData)
 
   revalidatePath('/account/profile')
+}
+
+export async function updateReservationAction(formData) {
+  const allData = Object.fromEntries(formData)
+  const { numGuests, observations, bookingId } = allData
+
+  const session = await auth()
+  if (!session) throw new Error('You must be logged in')
+
+  const guestBookings = await getBookings(session.user.guestId)
+  const validId = guestBookings.some(
+    booking => booking.id === Number(bookingId)
+  )
+
+  if (!validId) throw new Error('You are not allowed to update this booking')
+
+  const updateData = { numGuests: Number(numGuests), observations }
+  await updateBooking(bookingId, updateData)
+
+  revalidatePath('/account/reservations')
+  redirect('/account/reservations')
 }
 
 export async function deleteReservationAction(bookingId) {

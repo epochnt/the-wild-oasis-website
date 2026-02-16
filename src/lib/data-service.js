@@ -5,10 +5,10 @@ import { notFound } from 'next/navigation'
 /////////////
 // GET
 
-export async function getCabin(id) {
+export async function getCabin(id, fields = '*') {
   const { data, error } = await supabase
     .from('cabins')
-    .select('*')
+    .select(fields)
     .eq('id', id)
     .single()
 
@@ -63,10 +63,10 @@ export async function getGuest(email) {
   return data
 }
 
-export async function getBooking(id) {
+export async function getBooking(id, fields = '*') {
   const { data, error, count } = await supabase
     .from('bookings')
-    .select('*')
+    .select(fields)
     .eq('id', id)
     .single()
 
