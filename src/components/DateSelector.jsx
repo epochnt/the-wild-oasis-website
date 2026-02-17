@@ -1,11 +1,11 @@
 'use client'
 
-import { isWithinInterval } from 'date-fns'
+import { differenceInDays, isPast, isSameDay, isWithinInterval } from 'date-fns'
 import { DayPicker } from 'react-day-picker'
 import { useReservation } from '@/context'
 import 'react-day-picker/dist/style.css'
 
-function isAlreadyBooked(range, datesArr) {
+function isAlreadyBooked(range = {}, datesArr) {
   return (
     range.from &&
     range.to &&
@@ -15,18 +15,14 @@ function isAlreadyBooked(range, datesArr) {
   )
 }
 
-export function DateSelector({ cabin, settings }) {
-  const { range, setRange, resetRange } = useReservation()
-
-  // CHANGE
-  const regularPrice = 23
-  const discount = 23
-  const numNights = 23
-  const cabinPrice = 23
-  // const range = { from: null, to: null }
-
-  // SETTINGS
+export function DateSelector({ cabin, settings, bookedDates }) {
+  const { range = {}, setRange, resetRange } = useReservation()
   const { minBookingLength, maxBookingLength } = settings
+  const { regularPrice, discount } = cabin
+
+  const displayRange = isAlreadyBooked(range, bookedDates) ? {} : range
+  const numNights = differenceInDays(displayRange.to, displayRange.from)
+  const cabinPrice = numNights * (regularPrice - discount)
 
   return (
     <div className="flex flex-col justify-between">
@@ -34,7 +30,7 @@ export function DateSelector({ cabin, settings }) {
         className="place-self-center pt-12"
         mode="range"
         onSelect={range => setRange(range)}
-        selected={range}
+        selected={displayRange}
         min={minBookingLength + 1}
         max={maxBookingLength}
         fromMonth={new Date()}
@@ -42,6 +38,9 @@ export function DateSelector({ cabin, settings }) {
         toYear={new Date().getFullYear() + 5}
         captionLayout="dropdown"
         numberOfMonths={2}
+        disabled={curDate =>
+          isPast(curDate) || bookedDates.some(date => isSameDay(date, curDate))
+        }
       />
 
       <div className="bg-accent-500 text-primary-800 flex h-18 items-center justify-between px-8">

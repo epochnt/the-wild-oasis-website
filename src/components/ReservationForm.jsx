@@ -1,8 +1,37 @@
-import Image from 'next/image'
+'use client'
 
-export function ReservationForm({ maxCapacity, user }) {
+import Image from 'next/image'
+import { differenceInDays } from 'date-fns'
+import { useReservation } from '@/context'
+import { createReservationAction } from '@/lib/actions'
+import { SumbitButton } from '@/components/SumbitButton'
+
+export function ReservationForm({
+  maxCapacity,
+  id,
+  regularPrice,
+  discount,
+  user,
+}) {
+  const { range = {}, resetRange } = useReservation()
+
+  const startDate = range.from
+  const endDate = range.to
+
+  const numNights = differenceInDays(endDate, startDate)
+  const cabinPrice = numNights * (regularPrice - discount)
+
+  const reservationData = {
+    startDate,
+    endDate,
+    numNights,
+    cabinPrice,
+    cabinId: id,
+  }
+  const createReservation = createReservationAction.bind(null, reservationData)
+
   return (
-    <div className="scale-[1.01]">
+    <div className="items-stretch">
       <div className="bg-primary-800 text-primary-300 flex items-center justify-between px-16 py-2">
         <p>Logged in as</p>
 
@@ -19,7 +48,13 @@ export function ReservationForm({ maxCapacity, user }) {
         </div>
       </div>
 
-      <form className="bg-primary-900 flex flex-col gap-5 px-16 py-10 text-lg">
+      <form
+        action={async formData => {
+          await createReservation(formData)
+          resetRange()
+        }}
+        className="bg-primary-900 flex h-full flex-col gap-5 px-16 py-10 text-lg"
+      >
         <div className="space-y-2">
           <label htmlFor="numGuests">How many guests?</label>
           <select
@@ -52,11 +87,13 @@ export function ReservationForm({ maxCapacity, user }) {
         </div>
 
         <div className="flex items-center justify-end gap-6">
-          <p className="text-primary-300 text-base">Start by selecting dates</p>
-
-          <button className="bg-accent-500 text-primary-800 hover:bg-accent-600 px-8 py-4 font-semibold transition-all disabled:cursor-not-allowed disabled:bg-gray-500 disabled:text-gray-300">
-            Reserve now
-          </button>
+          {!(startDate && endDate) ? (
+            <p className="text-primary-300 text-base">
+              Start by selecting dates
+            </p>
+          ) : (
+            <SumbitButton pendingLabel="...Booking">Reserve Now</SumbitButton>
+          )}
         </div>
       </form>
     </div>

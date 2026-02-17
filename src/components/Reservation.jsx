@@ -11,10 +11,10 @@ export async function Reservation({ cabin }) {
   ])
 
   return (
-    <div className="border-primary-800 grid min-h-100 grid-cols-2 border">
+    <div className="border-primary-800 grid min-h-100 grid-cols-2 overflow-hidden border">
       <DateSelector {...{ cabin, settings, bookedDates }} />
       {session ? (
-        <ReservationForm maxCapacity={cabin.maxCapacity} user={session.user} />
+        <ReservationForm {...cabin} user={session.user} />
       ) : (
         <LoginMessage />
       )}
